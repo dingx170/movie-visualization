@@ -1,65 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
     <script src="https://d3js.org/d3-collection.v1.min.js"></script>
-    <script src="index.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-  <div class="jumbotron text-center">
-    <h1 class="text-center">Movie visualization</h1>
-    <h3 class="text-center">Team 2</h3>
-  </div>
-  <ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="mask-tab" data-bs-toggle="tab" data-bs-target="#mask" type="button" role="tab" aria-controls="mask" aria-selected="true">The Mask</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other" type="button" role="tab" aria-controls="other" aria-selected="false">other</button>
-    </li>
-  </ul>
-  <div class="tab-pane fade show active" id="mask" role="tabpanel" aria-labelledby="mask-tab">
-    <div class="row">
-      <div class="col-4">
-        <div class="videoContainer">
-          <video id="movie" class="responsive-video" controls>
-            <source src="http://localhost/VA6/mask.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-          </video>
+  <div class="row">
+    <div class="col-1"></div>
+
+    <div class="col-10">
+
+      <div class="container">
+        <br>
+        <h1 class="text-center">Movie visualization</h1>
+        <h3 class="text-center">Team 2</h3>
+        <br>
+      </div>
+    
+      <div class="row">
+        <div class="col-8">
+          <iframe width="550" height="400" src="https://www.youtube.com/embed/-tiqoH1iKG0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="col">
+
+            <!-- NEW CHART -->
+           <!-- <canvas id="chordChartCanvas"></canvas>-->
+            <div id="chordChartCanvas"></div>
+
         </div>
       </div>
-      <div class="col-8">
-        <select class="form-select pull-right" aria-label="Default select example" id="iCard2" onchange="makeChart('mask',this.value)">
-            <option value="20" selected="selected">20 minutes</option>
-            <option value="10">10 minutes</option>
-            <option value="5">5 minutes</option>
-            <option value="2">2 minutes</option>
-            <option value="1">1 minutes</option>
-        </select>
-          <div class="chartContainer">
-            <canvas id="emotionsOverTime" style="width:100%;height:100%;"></canvas>
-          </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-4">
-        <div class="chordChartContainer">
-          <div id="chordChartCanvas"></div>
+
+      <br>
+
+      <div class ="row">
+        <div class="col">
+          <canvas id="stackedBarChartCanvas"></canvas>
+        </div>
+        <div class="col">
+          <canvas id="lineChartCanvas"></canvas>
         </div>
       </div>
-      <div class="col-8">
-        <div class="chartContainer">
-          <canvas id="emotionsOverTimeLine" style="width:100%;height:100%;"></canvas>
+
+      <div class ="row">
+        <div class="col">
+        </div>
+        <div class="col">
         </div>
       </div>
     </div>
 
+    <div class="col-1"></div>
+
+    
   </div>
-  <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">...</div>
+
+  <script src="index.js"></script>
+
 </body>
 </html>
