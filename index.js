@@ -1,5 +1,5 @@
 var movies = {
-  mask: "http://localhost/VA6/theMask_1min.csv",
+  mask: "VA6/theMask_1min.csv",
   "": ""
 };
 
