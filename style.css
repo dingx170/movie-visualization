@@ -1,0 +1,51 @@
+body, html{
+  margin:0;
+  padding-left:15px;
+  padding-right:15px;
+}
+.tab-pane{
+  padding:15px;
+}
+.iframe{
+  width:100%;
+  height:100%;
+}
+.chartContainer{
+  height: 100%;
+  width: 100%;
+}
+.videoContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 66.25%;
+}
+
+.responsive-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+select {
+  float: right;
+  width: 150px !important;
+}
+.chordChartContainer{
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+}
+
+#chordChartCanvas{
+  position:  absolute;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+}
