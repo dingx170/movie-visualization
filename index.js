@@ -1,171 +1,117 @@
-let lineChartCanvas = document.getElementById('lineChartCanvas').getContext('2d');
-let stackedBarChartCanvas = document.getElementById('stackedBarChartCanvas').getContext('2d');
+var movies = {
+  mask: "http://localhost/VA6/theMask_1min.csv",
+  "": ""
+};
 
-
-d3.csv("theMask_1min.csv").then(makeChart);
-
-function makeChart(data) {
-
-    // group data by minute
-    var dataByMin = d3.nest()
-        .key(function(d) { return d.minute;})
-        .rollup((function(d) {
-            return {
-                angry: d3.sum(d, function(e) { return e.angry; }),
-                disgust: d3.sum(d, function(e) { return e.disgust; }),
-                fear: d3.sum(d, function(e) { return e.fear; }),
-                happy: d3.sum(d, function(e) { return e.happy; }),
-                sad: d3.sum(d, function(e) { return e.sad; }),
-                surprised: d3.sum(d, function(e) { return e.surprised; }),
-                neutral: d3.sum(d, function(e) { return e.neutral; })
-            };
-        })).entries(data);
-
-    var emotionLabels = dataByMin.map(function (d) {
-        return d.key; // min
+async function getData(movie, minutes){
+    var sec = minutes * 60, totals = [], stop = 0;
+    var data = await d3.csv(movies[movie]);
+    var last=false;
+    data.forEach((item, index) => {
+      if(index%sec==0){
+        stop = (last)?index/sec:stop;
+        last = false;
+        totals.push({second:0,minute:0,angry:0, disgust:0,fear:0,happy:0,sad:0,surprised:0,neutral:0});
+      }
+      for(prop in item){
+        if(prop=="second") totals[totals.length - 1].second = index;
+        else {
+          totals[totals.length - 1][prop] += parseInt(item[prop]);
+          if(prop!="minute" && totals[totals.length - 1][prop] > 0) last = true;
+        };
+      }
     });
-    var angryData = dataByMin.map(function (d) {
-        return d.value.angry;
-    });
-    var disgustData = dataByMin.map(function (d) {
-        return d.value.disgust;
-    });
-    var fearData = dataByMin.map(function (d) {
-        return d.value.fear;
-    });
-    var happyData = dataByMin.map(function (d) {
-        return d.value.happy;
-    });
-    var sadData = dataByMin.map(function (d) {
-        return d.value.sad;
-    });
-    var surprisedData = dataByMin.map(function (d) {
-        return d.value.surprised;
-    });
-    var neutralData = dataByMin.map(function (d) {
-        return d.value.neutral;
-    });
-
-    var lineChart = new Chart("lineChartCanvas", {
-        type: "line",
-        data: {
-        labels: emotionLabels,
-        datasets: [
-            {
-                label: "Angry",
-                data: angryData,
-                borderColor: "red"
-            },
-            {
-                label: "Disgust",
-                data: disgustData,
-                borderColor: "green"
-            },
-            {
-                label: "Fear",
-                data: fearData,
-                borderColor: "black"
-            },
-            {
-                label: "Happy",
-                data: happyData,
-                borderColor: "yellow"
-            },
-            {
-                label: "Sad",
-                data: sadData,
-                borderColor: "blue"
-            },
-            {
-                label: "Suprised",
-                data: surprisedData,
-                borderColor: "orange"
-            },
-            {
-                label: "Neutral",
-                data: neutralData,
-                borderColor: "grey"
-            }
-        ]
-        },
-        options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Emotions over time'
-                },
-            }
-        }
-    });
-
-    var stackedBarChart = new Chart("stackedBarChartCanvas", {
-        type: 'bar',
-        data: {
-          labels: emotionLabels,
-          datasets: [
-            {
-                label: "Angry",
-                data: angryData,
-                backgroundColor: "red"
-            },
-            {
-                label: "Disgust",
-                data: disgustData,
-                backgroundColor: "green"
-            },
-            {
-                label: "Fear",
-                data: fearData,
-                backgroundColor: "black"
-            },
-            {
-                label: "Happy",
-                data: happyData,
-                backgroundColor: "yellow"
-            },
-            {
-                label: "Sad",
-                data: sadData,
-                backgroundColor: "blue"
-            },
-            {
-                label: "Suprised",
-                data: surprisedData,
-                backgroundColor: "orange"
-            },
-            {
-                label: "Neutral",
-                data: neutralData,
-                backgroundColor: "grey"
-            }  
-            ],
-        },
-        options: {
-            plugins: {
-              title: {
-                display: true,
-                text: 'Emotions over time'
-              },
-            },
-            responsive: true,
-            scales: {
-              x: {
-                stacked: true,
-              },
-              y: {
-                stacked: true
-              }
-            }
-        }
-    });
-
-    createChord(data);
-
+    totals.length = stop;
+    return totals;
 }
 
-function createChord(data) {
-    var width = 460, height = 460;
-    var innerRadius = 150, outerRadius = 165;
+async function makeChart(movie, minutes) {
+    var data = await getData(movie, minutes);
+
+    const charts = {'emotionsOverTime': 'bar', 'emotionsOverTimeLine': 'line'};
+    for (const [canvasId, type] of Object.entries(charts)) {
+      scales = {};
+      if(type == "bar") scales= {x: {stacked: true},y: {stacked: true}};
+      parent = $("#" + canvasId).parent();
+      $("#" + canvasId).remove();
+      parent.append('<canvas id="'+canvasId+'" style="width:100%;height:100%;"></canvas>');
+      var ctx = document.getElementById(canvasId).getContext('2d');
+
+
+      alpha = 0.6;
+      alphaH = 1;
+
+      const testChart = new Chart(ctx, {
+        type: type,
+        responsive:true,
+        maintainAspectRatio: false,
+        data: {
+          labels: data.map(function(it,i,ar) {return `${Math.round((ar[i-1]?ar[i-1].second:0)/60)}-${Math.round(it.second/60)} min`}),
+          datasets: [
+            {
+              label: "Angry",
+              data: data.map(a => a.angry),
+              backgroundColor: `rgba(255, 64, 0,${alpha})`,
+              borderColor: `rgba(255, 64, 0,${alphaH})`
+
+            },
+            {
+              label: "Disgust",
+              data: data.map(a => a.disgust),
+              backgroundColor: `rgba(255, 191, 0,${alpha})`,
+              borderColor: `rgba(255, 191, 0,${alphaH})`
+            },
+            {
+              label: "Fear",
+              data: data.map(a => a.fear),
+              backgroundColor: `rgba(160, 82, 45,${alpha})`,
+              borderColor: `rgba(160, 82, 45,${alphaH})`
+            },
+            {
+              label: "Happy",
+              data: data.map(a => a.happy),
+              backgroundColor: `rgba(0, 153, 51,${alpha})`,
+              borderColor: `rgba(0, 153, 51,${alphaH})`
+            },
+            {
+              label: "Sad",
+              data: data.map(a => a.sad),
+              backgroundColor: `rgba(80, 80, 255,${alpha})`,
+            borderColor: `rgba(80, 80, 255,${alphaH})`
+          },
+          {
+            label: "Suprised",
+            data: data.map(a => a.surprised),
+            backgroundColor: `rgba(255, 80, 255,${alpha})`,
+            borderColor: `rgba(255, 80, 255,${alphaH})`
+          },
+          {
+            label: "Neutral",
+            data: data.map(a => a.neutral),
+            backgroundColor: `rgba(194, 194, 214,${alpha})`,
+            borderColor: `rgba(194, 194, 214,${alphaH})`
+          }]
+        },
+        options: {
+          scales: scales,
+          onClick: (e) => {
+            const canvasPosition = Chart.helpers.getRelativePosition(e, testChart);
+            const dataX = testChart.scales.x.getValueForPixel(canvasPosition.x);
+            document.getElementById('movie').pause();
+            if(dataX<1)
+              document.getElementById('movie').currentTime = 0;
+              else
+              document.getElementById('movie').currentTime = data[dataX-1].second;
+            }
+          }
+        });
+    }
+}
+
+async function createChord(movie, minutes) {
+  var data = await getData(movie, minutes);
+    var width = parseInt($("#chordChartCanvas").parent().width()), height = width;
+    var innerRadius = width*0.65/2, outerRadius = width*0.70/2;
     // create the svg area
     var svg = d3.select('#chordChartCanvas')
         .append("svg")
@@ -182,6 +128,7 @@ function createChord(data) {
         .padAngle(0.05)     // padding between entities (black arc)
         .sortSubgroups(d3.descending)
         (completeMatrix);
+
 
 
     // border circle for names
@@ -267,13 +214,10 @@ function createChord(data) {
                 .style("opacity", opacity);
         };
     }
-
-
 }
 
 function prepareData(data) {
     var prev;
-
     var completeMatrix = [
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
@@ -357,6 +301,12 @@ function prepareData(data) {
         }
         prev = d;
     });
-
     return completeMatrix;
 }
+
+async function start()
+{
+  await makeChart("mask", 20);
+  createChord("mask", 1);
+}
+start()
