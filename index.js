@@ -51,44 +51,44 @@ async function makeChart(movie, minutes) {
             {
               label: "Angry",
               data: data.map(a => a.angry),
-              backgroundColor: `rgba(255, 64, 0,${alpha})`,
+              backgroundColor: pattern.draw('diagonal-right-left',`rgba(255, 64, 0,${alpha})`),
               borderColor: `rgba(255, 64, 0,${alphaH})`
 
             },
             {
               label: "Disgust",
               data: data.map(a => a.disgust),
-              backgroundColor: `rgba(255, 191, 0,${alpha})`,
+              backgroundColor: pattern.draw('dot',`rgba(255, 191, 0,${alpha})`),
               borderColor: `rgba(255, 191, 0,${alphaH})`
             },
             {
               label: "Fear",
               data: data.map(a => a.fear),
-              backgroundColor: `rgba(160, 82, 45,${alpha})`,
+              backgroundColor: pattern.draw('dash',`rgba(160, 82, 45,${alpha})`),
               borderColor: `rgba(160, 82, 45,${alphaH})`
             },
             {
               label: "Happy",
               data: data.map(a => a.happy),
-              backgroundColor: `rgba(0, 153, 51,${alpha})`,
+              backgroundColor: pattern.draw('box',`rgba(0, 153, 51,${alpha})`),
               borderColor: `rgba(0, 153, 51,${alphaH})`
             },
             {
               label: "Sad",
               data: data.map(a => a.sad),
-              backgroundColor: `rgba(80, 80, 255,${alpha})`,
+              backgroundColor: pattern.draw('triangle',`rgba(80, 80, 255,${alpha})`),
             borderColor: `rgba(80, 80, 255,${alphaH})`
           },
           {
             label: "Suprised",
             data: data.map(a => a.surprised),
-            backgroundColor: `rgba(255, 80, 255,${alpha})`,
+            backgroundColor: pattern.draw('line-vertical',`rgba(255, 80, 255,${alpha})`),
             borderColor: `rgba(255, 80, 255,${alphaH})`
           },
           {
             label: "Neutral",
             data: data.map(a => a.neutral),
-            backgroundColor: `rgba(194, 194, 214,${alpha})`,
+            backgroundColor: pattern.draw('zigzag',`rgba(194, 194, 214,${alpha})`),
             borderColor: `rgba(194, 194, 214,${alphaH})`
           }]
         },
