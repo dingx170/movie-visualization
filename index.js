@@ -121,6 +121,8 @@ async function createChord(movie) {
     // Create patterns on the placeholder
     createPatterns(canvas, colors);
 
+    createLegends(colors, names);
+
     // Create SVG area for chart
     var svg = canvas.append("svg")
         .attr("width", width)
@@ -313,57 +315,79 @@ function createPatterns(canvas, colors) {
     defs.append('pattern')
         .attr('id', 'diagonalHatch')
         .attr('patternUnits', 'userSpaceOnUse')
-        .attr('width', 4).attr('height', 6)
-        .append('path').attr('d', 'M-1, 1 12, -2 M0, 4 14, -4 M3, 5 12, -2')
-        .attr('stroke', colors[0]).attr('stroke-width', 1);
+        .attr('width', 10).attr('height', 10).attr('patternTransform','rotate(45,0,0)')
+        .append('rect').attr('width', 5.5).attr('height', 10)
+        .attr('stroke', colors[0]).attr('stroke-width', 5.5);
 
+    
     defs.append('pattern')
         .attr('id', 'diagonalHatch1')
         .attr('patternUnits', 'userSpaceOnUse')
-        .attr('width', 4).attr('height', 4)
-        .append('circle').attr('cx', 2).attr('cy', 2).attr('r', 2)
-        .attr('stroke', colors[1]).attr('stroke-width', 1);
+        .attr('width', 10).attr('height', 10)
+        .append('rect').attr('width', 10).attr('height', 10).attr('fill', colors[1]);
+    p = d3.select('#chordChartCanvas svg pattern#diagonalHatch1');
+    p.append('circle').attr('cx', 5).attr('cy', 5).attr('r', 1.5).attr('fill', '#ffffff')
+        .attr('stroke', '#ffffff').attr('stroke-width', 1);
+
 
     defs.append('pattern')
         .attr('id', 'diagonalHatch2')
         .attr('patternUnits', 'userSpaceOnUse')
-        .attr('width', 4).attr('height', 4)
-        .append('rect').attr('width', 3).attr('height', 1)
-        .attr('stroke', colors[2]).attr('stroke-width', 1);
+        .attr('width', 12).attr('height', 12).attr('patternTransform', 'rotate(135,0,0)')
+        .append('rect').attr('width', 12).attr('height', 12).attr('fill', colors[2]);
+    
+    p = d3.select('#chordChartCanvas svg pattern#diagonalHatch2');
+    p.append('rect').attr('width',1.5).attr('height',6.5).attr('fill', '#FFFFFF')
+        .attr('stroke', '#FFFFFF').attr('stroke-width', .5);
+
 
     defs.append('pattern')
         .attr('id', 'diagonalHatch3')
         .attr('patternUnits', 'userSpaceOnUse')
-        .attr('width', 2).attr('height', 2)
-        .append('path').attr('d', 'M0 0l5 3v5l-5 -3z')
-        .attr('stroke', colors[3]).attr('stroke-width', 1);
+        .attr('width', 16).attr('height', 16)
+        .append('rect').attr('width', 16).attr('height', 16).attr('fill', colors[3]);
 
-    defs.append('pattern').attr('width', 2).attr('height', 2)
+    p = d3.select('#chordChartCanvas svg pattern#diagonalHatch3');
+    p.append('rect').attr('width', 5).attr('height', 5).attr('fill', colors[3])
+        .attr('stroke', '#FFFFFF').attr('stroke-width', 1);
+    p.append('rect').attr('width', 5).attr('height', 5).attr('fill', colors[3])
+        .attr('stroke', '#FFFFFF').attr('stroke-width', 1).attr('transform','translate(8,8)');
+
+    defs.append('pattern')
         .attr('id', 'diagonalHatch4')
         .attr('patternUnits', 'userSpaceOnUse')
-        .attr('width', 4).attr('height', 4)
-        .append('circle').attr('cx', 0).attr('cy', 0).attr('r', 2)
-        .attr('stroke', colors[4]).attr('stroke-width', 1);
+        .attr('width', 16).attr('height', 16)
+        .append('rect').attr('width', 16).attr('height', 16).attr('fill', colors[4]);
+
+    p = d3.select('#chordChartCanvas svg pattern#diagonalHatch4');
+    p.append('polygon').attr('points','4,1 8,8 1,8').attr('fill', '#FFFFFF')
+        .attr('stroke', '#FFFFFF').attr('stroke-width', 1);
+    p.append('polygon').attr('points', '8,4 12,12 4,12').attr('fill', '#FFFFFF')
+        .attr('stroke', '#FFFFFF').attr('stroke-width', 1).attr('transform', 'translate(4,4)');
 
     defs.append('pattern').attr('width', 2).attr('height', 2)
         .attr('id', 'diagonalHatch5')
         .attr('patternUnits', 'userSpaceOnUse')
-        .attr('width', 4).attr('height', 4)
-        .append('rect').attr('width', 1).attr('height', 3)
-        .attr('stroke', colors[5]).attr('stroke-width', 1);
+        .attr('width', 8).attr('height', 8)
+        .append('rect').attr('width', 5.5).attr('height', 8)
+        .attr('stroke', colors[5]).attr('stroke-width', 1.5).attr('fill', colors[5]);
 
-    defs.append('pattern').attr('width', 2).attr('height', 2)
+    defs.append('pattern')
         .attr('id', 'diagonalHatch6')
         .attr('patternUnits', 'userSpaceOnUse')
-        .attr('width', 2).attr('height', 4)
-        .append('path').attr('d', 'M-1, 1 2, -2 M0, 4 14, -4 M3, 5 12, -2')
-        .attr('stroke', colors[6]).attr('stroke-width', 2);
+        .attr('width', 8).attr('height', 8)
+        .append('rect').attr('width', 8).attr('height', 8).attr('fill', colors[6]);
+
+   p = d3.select('#chordChartCanvas svg pattern#diagonalHatch6');
+    p.append('polyline').attr('points', '0,7 4,3 8,7').attr('fill', colors[6])
+        .attr('stroke', '#FFFFFF').attr('stroke-width', 2);
 }
 
 function getPattern(idx) {
     switch (idx) {
         case 0:
             return 'url(#diagonalHatch)';
+           
         case 1:
             return 'url(#diagonalHatch1)';
         case 2:
@@ -377,6 +401,44 @@ function getPattern(idx) {
         case 6:
             return 'url(#diagonalHatch6)';
     }
+}
+
+async function createLegends(colors, names) {
+    var width = parseInt($(".chordChartLegendContainer").parent().width()), height = parseInt($(".chordChartLegendContainer").parent().height());
+    canvas = d3.select('#chordChartLegend');
+    createPatterns(canvas, colors);
+    var svg = canvas.append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + 0 + "," + height * 0.5/ 2 + ")");
+
+    function legend(cx, cy, idx) {
+        svg.append('rect').attr('width', 42).attr('height', 12).attr('fill', function () { return getPattern(idx) })
+            .attr("transform", "translate(" + cx + "," + cy + ")")
+            .style("opacity", 0.8)
+            .style('stroke-width', 2)
+            .style("stroke", function (d) {
+                return d3.rgb(colors[idx]).darker()
+            });
+
+        svg.append('text').text(function (d) {
+            return names[idx];
+        })
+        .attr("transform", "translate(" + (cx+50) + "," + (cy+10)  + ")")
+            .style("fill", function () {
+                return d3.rgb(colors[idx]).darker()
+            })
+            .attr("id", "label");
+    }
+
+    legend(0, 10, 0);
+    legend(0, 40, 1);
+    legend(0, 70, 2);
+    legend(0, 100, 3);
+    legend(0, 130, 4);
+    legend(0, 160, 5);
+    legend(0, 190, 6 )
 }
 
 async function start()
