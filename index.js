@@ -49,44 +49,50 @@ async function makeChart(movie, minutes) {
               label: "Angry",
               data: data.map(a => a.angry),
               backgroundColor: pattern.draw('diagonal-right-left',`rgba(255, 64, 0,${alpha})`),
-              borderColor: `rgba(255, 64, 0,${alphaH})`
-
+              borderColor: `rgba(255, 64, 0,${alphaH})`,
+              pointRadius: 7
             },
             {
               label: "Disgust",
               data: data.map(a => a.disgust),
               backgroundColor: pattern.draw('dot',`rgba(255, 191, 0,${alpha})`),
-              borderColor: `rgba(255, 191, 0,${alphaH})`
+              borderColor: `rgba(255, 191, 0,${alphaH})`,
+              pointRadius: 7
             },
             {
               label: "Fear",
               data: data.map(a => a.fear),
               backgroundColor: pattern.draw('dash',`rgba(160, 82, 45,${alpha})`),
-              borderColor: `rgba(160, 82, 45,${alphaH})`
+              borderColor: `rgba(160, 82, 45,${alphaH})`,
+              pointRadius: 7
             },
             {
               label: "Happy",
               data: data.map(a => a.happy),
               backgroundColor: pattern.draw('box',`rgba(0, 153, 51,${alpha})`),
-              borderColor: `rgba(0, 153, 51,${alphaH})`
+              borderColor: `rgba(0, 153, 51,${alphaH})`,
+              pointRadius: 7
             },
             {
               label: "Sad",
               data: data.map(a => a.sad),
               backgroundColor: pattern.draw('triangle',`rgba(80, 80, 255,${alpha})`),
-            borderColor: `rgba(80, 80, 255,${alphaH})`
+            borderColor: `rgba(80, 80, 255,${alphaH})`,
+            pointRadius: 7
           },
           {
             label: "Suprised",
             data: data.map(a => a.surprised),
             backgroundColor: pattern.draw('line-vertical',`rgba(255, 80, 255,${alpha})`),
-            borderColor: `rgba(255, 80, 255,${alphaH})`
+            borderColor: `rgba(255, 80, 255,${alphaH})`,
+            pointRadius: 7
           },
           {
             label: "Neutral",
             data: data.map(a => a.neutral),
             backgroundColor: pattern.draw('zigzag',`rgba(194, 194, 214,${alpha})`),
-            borderColor: `rgba(194, 194, 214,${alphaH})`
+            borderColor: `rgba(194, 194, 214,${alphaH})`,
+            pointRadius: 7
           }]
         },
         options: {

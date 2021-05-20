@@ -92,3 +92,7 @@ label{
   height: 100%;
   border: none;
 }
+
+.chordChartLegendContainer {
+  margin-left: -5%; /* to avoid cut off on "Surprised" */
+}
