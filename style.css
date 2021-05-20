@@ -37,7 +37,7 @@ select {
   width: 150px !important;
 }
 /* .chordChartContainer{
-  width: 100%; 
+  width: 100%;
   padding-top: 100%;
   position: relative;
 }
@@ -56,8 +56,10 @@ label{
 }
 
 .chordChartContainer{
+/*
   margin-top: -15%;
   margin-bottom: -10%;
+  */
   height: 100%;
   width: 100%;
 }
@@ -77,4 +79,31 @@ label{
   font-weight: bold;
   font-family:Georgia, 'Times New Roman', Times, serif;
   font-style: italic;
+}
+
+
+
+
+
+
+.chartContainer{
+  height: 100%;
+  width: 100%;
+}
+.container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 60%;
+}
+
+.responsive-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
 }

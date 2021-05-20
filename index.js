@@ -1,11 +1,7 @@
-var movies = {
-  mask: "VA6/theMask_1min.csv",
-  "": ""
-};
 
 async function getData(movie, minutes){
     var sec = minutes * 60, totals = [], stop = 0;
-    var data = await d3.csv(movies[movie]);
+    var data = await d3.csv("http://localhost/data/" + movie + ".csv");
     var last=false;
     data.forEach((item, index) => {
       if(index%sec==0){
@@ -29,7 +25,9 @@ async function makeChart(movie, minutes) {
     var data = await getData(movie, minutes);
 
     const charts = {'emotionsOverTime': 'bar', 'emotionsOverTimeLine': 'line'};
-    for (const [canvasId, type] of Object.entries(charts)) {
+    for (var [canvasId, type] of Object.entries(charts)) {
+      canvasId = movie+'-'+canvasId;
+
       scales = {};
       if(type == "bar") scales= {x: {stacked: true},y: {stacked: true}};
       parent = $("#" + canvasId).parent();
@@ -97,31 +95,44 @@ async function makeChart(movie, minutes) {
           onClick: (e) => {
             const canvasPosition = Chart.helpers.getRelativePosition(e, testChart);
             const dataX = testChart.scales.x.getValueForPixel(canvasPosition.x);
-            document.getElementById('movie').pause();
+            document.getElementById(movie + '-movie').pause();
             if(dataX<1)
-              document.getElementById('movie').currentTime = 0;
+              document.getElementById(movie + '-movie').currentTime = 0;
               else
-              document.getElementById('movie').currentTime = data[dataX-1].second;
+              document.getElementById(movie + '-movie').currentTime = data[dataX-1].second;
             }
           }
         });
     }
 }
 
+
 async function createChord(movie) {
-    var data = await d3.csv(movies[movie]);
-    var width = parseInt($("#chordChartCanvas").parent().width()), height = width;
+    var data = await getData(movie, 1);
+
+    parent = $("#"+movie+"-chordChartCanvas").parent();
+    $("#"+movie+"-chordChartCanvas").remove();
+    parent.append('<div id="'+movie+'-chordChartCanvas"></div>');
+
+
+    var width = parseInt($("#"+movie+"-chordChartCanvas").parent().width()), height = width;
     var innerRadius = width * 0.65 / 2, outerRadius = width * 0.70 / 2;
     var names = ["Angry", "Disgust", "Fear", "Happy", "Sad", "Surprised", "Neutral"];
     var colors = ["#ff4000", "#ffbf00", "#A0522D", "#009933", "#5050FF", "#FF50FF", "#c2c2d6"];
 
     // Get place holder for the svg area
-    var canvas = d3.select('#chordChartCanvas');
+    var canvas = d3.select("#"+movie+'-chordChartCanvas');
+
+
+
+    //############# CAUSES ERROR
 
     // Create patterns on the placeholder
-    createPatterns(canvas, colors);
+    //createPatterns(movie, canvas, colors);
+    //createLegends(movie, colors, names);
 
-    createLegends(colors, names);
+    //#############
+
 
     // Create SVG area for chart
     var svg = canvas.append("svg")
@@ -129,6 +140,10 @@ async function createChord(movie) {
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
+
+
 
     // format the data
     completeMatrix = prepareData(data);
@@ -138,7 +153,6 @@ async function createChord(movie) {
         .padAngle(0.05)     // padding between entities (black arc)
         .sortSubgroups(d3.descending)
         (completeMatrix);
-
 
 
     // border circle for names
@@ -220,6 +234,8 @@ async function createChord(movie) {
         };
     }
 }
+
+
 
 function prepareData(data) {
     var prev;
@@ -309,8 +325,9 @@ function prepareData(data) {
     return completeMatrix;
 }
 
-function createPatterns(canvas, colors) {
-    defs = canvas.append('svg').attr('width', 1).attr('height', 1).append('defs')
+function createPatterns(movie, canvas, colors) {
+    defs = canvas.append('svg').attr('width', 1).attr('height', 1).append('defs');
+
 
     defs.append('pattern')
         .attr('id', 'diagonalHatch')
@@ -319,13 +336,13 @@ function createPatterns(canvas, colors) {
         .append('rect').attr('width', 5.5).attr('height', 10)
         .attr('stroke', colors[0]).attr('stroke-width', 5.5);
 
-    
     defs.append('pattern')
         .attr('id', 'diagonalHatch1')
         .attr('patternUnits', 'userSpaceOnUse')
         .attr('width', 10).attr('height', 10)
         .append('rect').attr('width', 10).attr('height', 10).attr('fill', colors[1]);
-    p = d3.select('#chordChartCanvas svg pattern#diagonalHatch1');
+
+    var p = d3.select('#'+movie+'-chordChartCanvas svg pattern#diagonalHatch1');
     p.append('circle').attr('cx', 5).attr('cy', 5).attr('r', 1.5).attr('fill', '#ffffff')
         .attr('stroke', '#ffffff').attr('stroke-width', 1);
 
@@ -335,8 +352,8 @@ function createPatterns(canvas, colors) {
         .attr('patternUnits', 'userSpaceOnUse')
         .attr('width', 12).attr('height', 12).attr('patternTransform', 'rotate(135,0,0)')
         .append('rect').attr('width', 12).attr('height', 12).attr('fill', colors[2]);
-    
-    p = d3.select('#chordChartCanvas svg pattern#diagonalHatch2');
+
+    p = d3.select('#'+movie+'-chordChartCanvas svg pattern#diagonalHatch2');
     p.append('rect').attr('width',1.5).attr('height',6.5).attr('fill', '#FFFFFF')
         .attr('stroke', '#FFFFFF').attr('stroke-width', .5);
 
@@ -347,7 +364,7 @@ function createPatterns(canvas, colors) {
         .attr('width', 16).attr('height', 16)
         .append('rect').attr('width', 16).attr('height', 16).attr('fill', colors[3]);
 
-    p = d3.select('#chordChartCanvas svg pattern#diagonalHatch3');
+    p = d3.select('#'+movie+'-chordChartCanvas svg pattern#diagonalHatch3');
     p.append('rect').attr('width', 5).attr('height', 5).attr('fill', colors[3])
         .attr('stroke', '#FFFFFF').attr('stroke-width', 1);
     p.append('rect').attr('width', 5).attr('height', 5).attr('fill', colors[3])
@@ -359,7 +376,7 @@ function createPatterns(canvas, colors) {
         .attr('width', 16).attr('height', 16)
         .append('rect').attr('width', 16).attr('height', 16).attr('fill', colors[4]);
 
-    p = d3.select('#chordChartCanvas svg pattern#diagonalHatch4');
+    p = d3.select('#'+movie+'-chordChartCanvas svg pattern#diagonalHatch4');
     p.append('polygon').attr('points','4,1 8,8 1,8').attr('fill', '#FFFFFF')
         .attr('stroke', '#FFFFFF').attr('stroke-width', 1);
     p.append('polygon').attr('points', '8,4 12,12 4,12').attr('fill', '#FFFFFF')
@@ -378,16 +395,17 @@ function createPatterns(canvas, colors) {
         .attr('width', 8).attr('height', 8)
         .append('rect').attr('width', 8).attr('height', 8).attr('fill', colors[6]);
 
-   p = d3.select('#chordChartCanvas svg pattern#diagonalHatch6');
+   p = d3.select('#'+movie+'-chordChartCanvas svg pattern#diagonalHatch6');
     p.append('polyline').attr('points', '0,7 4,3 8,7').attr('fill', colors[6])
         .attr('stroke', '#FFFFFF').attr('stroke-width', 2);
+
 }
 
 function getPattern(idx) {
     switch (idx) {
         case 0:
             return 'url(#diagonalHatch)';
-           
+
         case 1:
             return 'url(#diagonalHatch1)';
         case 2:
@@ -403,10 +421,10 @@ function getPattern(idx) {
     }
 }
 
-async function createLegends(colors, names) {
+async function createLegends(movie, colors, names) {
     var width = parseInt($(".chordChartLegendContainer").parent().width()), height = parseInt($(".chordChartLegendContainer").parent().height());
-    canvas = d3.select('#chordChartLegend');
-    createPatterns(canvas, colors);
+    canvas = d3.select('#'+movie+'-chordChartLegend');
+    createPatterns(movie, canvas, colors);
     var svg = canvas.append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -441,9 +459,65 @@ async function createLegends(colors, names) {
     legend(0, 190, 6 )
 }
 
-async function start()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$(document).ready(function () {
+    var activeTab = $(".tab-content").find(".active");
+    var id = activeTab.attr('id');
+    changeMovie(id)
+});
+
+
+async function changeMovie(movie)
 {
-  await makeChart("mask", 20);
-  createChord("mask");
+  $("video").each(function() {
+    $(this).get(0).pause();
+  });
+  makeChart(movie, 20);
+
+  setTimeout(function (){
+    createChord(movie, 1);
+  }, 200);
 }
-start()
