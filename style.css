@@ -36,19 +36,7 @@ select {
   float: right;
   width: 150px !important;
 }
-/* .chordChartContainer{
-  width: 100%;
-  padding-top: 100%;
-  position: relative;
-}
 
-#chordChartCanvas{
-  position:  absolute;
-   top: 0;
-   left: 0;
-   bottom: 0;
-   right: 0;
-} */
 
 label{
   padding-top: 6px;
@@ -56,10 +44,8 @@ label{
 }
 
 .chordChartContainer{
-/*
   margin-top: -15%;
   margin-bottom: -10%;
-  */
   height: 100%;
   width: 100%;
 }
@@ -81,23 +67,14 @@ label{
   font-style: italic;
 }
 
-
-
-
-
-
-.chartContainer{
-  height: 100%;
-  width: 100%;
-}
-.container {
+.chartContainer {
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-top: 60%;
+  padding-top: 66.25%;
 }
 
-.responsive-container {
+.responsive-chart {
   position: absolute;
   top: 0;
   left: 0;

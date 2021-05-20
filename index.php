@@ -66,15 +66,20 @@
     <div class="row interactiveContainer">
 
       <div class="col">
-        <div class="chartContainer">
-          <h5 class="text-center">The change of emotions over time (proportion focused)</h5>
-          <canvas id="<?=$f?>-emotionsOverTime"></canvas>
+        <h5 class="text-center">The change of emotions over time (proportion focused)</h5>
+        <div class="videoContainer">
+
+          <div class="responsive-video">
+          <canvas  id="<?=$f?>-emotionsOverTime"></canvas>
+        </div>
         </div>
       </div>
       <div class="col">
         <h5 class="text-center">The change of emotions over time (trend focused)</h5>
-        <div class="chartContainer">
-          <canvas id="<?=$f?>-emotionsOverTimeLine"></canvas>
+        <div class="videoContainer">
+          <div class="responsive-video">
+          <canvas  id="<?=$f?>-emotionsOverTimeLine"></canvas>
+        </div>
         </div>
       </div>
 
