@@ -51,13 +51,21 @@ label{
 }
 
 .interactiveContainer {
-  border: 2px solid dodgerblue;
   margin-left: 5%;
   margin-right: 5%;
   padding-left: 1%;
   padding-right: 1%;
   padding-top: 1%;
   padding-bottom: 1%;
+}
+
+.chartBorder {
+  border: 2px solid dodgerblue;
+}
+
+.topRowContainer {
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .title {

@@ -91,13 +91,6 @@ async function makeChart(movie, minutes) {
         },
         options: {
           scales: scales,
-          plugins: {
-            title: {
-                display: true,
-                fontSize: 50,
-                text: 'Custom Chart Title'
-            }
-        },
           onClick: (e) => {
             const canvasPosition = Chart.helpers.getRelativePosition(e, testChart);
             const dataX = testChart.scales.x.getValueForPixel(canvasPosition.x);
@@ -467,8 +460,19 @@ async function createLegends(movie, colors, names) {
 
 
 
+async function updateMovieInfo(movie) {
+    var data = {'Mask' : {'title':'The Mask', 'year':'1994','director':'Charles Russell', 'genre':'Comedy/Romance', 'desc':'The Mask, a mischievous green-faced troublemaker with the ability to cartoonishly alter himself and his surroundings at will who later becomes a crimefighter, only to become targeted by gangster Dorian Tyrell, who intends to use the mask to overthrow his superior.'},
+                'Jumanji' : {'title':'Jumanji: Welcome to the Jungl‪e', 'year':'2017','director':'Jake Kasdan', 'genre':'Comedy/Adventure', 'desc':'The story focuses on a group of teenagers who come across Jumanji—now transformed into a video game—twenty-one years after the events of the 1995 film. They find themselves trapped in the game as a set of adult avatars, seeking to complete a quest alongside another player who has been trapped since 1996.'},
+                'Jigsaw' : {'title':'Jigsaw', 'year':'2017','director':'Michael Spierig, Peter Spierig', 'genre':'Horror/Thriller', 'desc':'After a series of murders bearing all the markings of the Jigsaw killer, law enforcement officials find themselves chasing the ghost of a man who has been dead for over a decade, and they become embroiled in a new game that\'s only just begun.'},
+                'Martian' : {'title':'The Martian', 'year':'2015','director':'Ridley Scott', 'genre':'Sci-fi/Drama', 'desc':'An astronaut becomes stranded on Mars after his team assume him dead and must rely on his ingenuity to find a way to signal to Earth that he is alive.'}};
 
-
+    textId = movie+'-info';
+    parent = $("#" + textId).parent();
+    $("#" + textId).remove();
+    console.log(data[movie]);
+    parent.append('<div id="'+textId+'"><b>Title:</b> {{title}}<br/><b>Year:</b> {{year}}<br/><b>Director:</b> {{director}}<br/><b>Genre:</b> {{genre}}<br/><br/><b>Description:</b> {{desc}}</div>');
+    w3.displayObject(textId, data[movie]);
+}
 
 
 $(document).ready(function () {
@@ -485,6 +489,7 @@ async function changeMovie(movie)
   });
 
   await makeChart(movie, 20);
+  await updateMovieInfo(movie);
 
   setTimeout(function (){
     createChord(movie, 1);
